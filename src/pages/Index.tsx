@@ -1,17 +1,41 @@
 
 import CertificationForm from "@/components/CertificationForm";
+import { useAuth } from "@/components/AuthProvider";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+  };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Button onClick={() => navigate('/auth')}>Sign In</Button>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h2 className="mt-6 text-3xl font-bold text-industrial-900">
-            Seam Weld Certification System
-          </h2>
-          <p className="mt-2 text-industrial-600">
-            Complete the form below to start a new certification process
-          </p>
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h2 className="text-3xl font-bold text-industrial-900">
+              Seam Weld Certification System
+            </h2>
+            <p className="text-industrial-600">
+              Complete the form below to start a new certification process
+            </p>
+          </div>
+          <Button onClick={handleSignOut} variant="outline">
+            Sign Out
+          </Button>
         </div>
         <CertificationForm />
       </div>
