@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { toast } from '@/components/ui/sonner';
 import {
   Select,
   SelectContent,
@@ -25,6 +25,21 @@ const CertificationForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
+    
+    // Show a toast notification to provide feedback to the user
+    toast.success("Certification process started", {
+      description: `Trainee: ${formData.traineeName}, Type: ${formData.certificationType || 'Not specified'}`,
+    });
+    
+    // Reset the form after submission (optional)
+    setFormData({
+      traineeName: '',
+      areaExamined: '',
+      certificationType: '',
+      beginningDate: '',
+      trainerInitials: '',
+      traineeInitials: '',
+    });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
