@@ -33,6 +33,14 @@ const CertificationForm = () => {
     traineeInitials: '',
   });
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
@@ -168,4 +176,3 @@ const CertificationForm = () => {
 };
 
 export default CertificationForm;
-
