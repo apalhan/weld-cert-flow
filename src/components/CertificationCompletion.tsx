@@ -5,15 +5,50 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { toast } from '@/components/ui/sonner';
+import { useAuth } from '@/components/AuthProvider';
+import { supabase } from '@/integrations/supabase/client';
 
 interface CertificationCompletionProps {
   onComplete: () => void;
+  formData?: {
+    traineeName: string;
+    certificationType: string;
+  };
 }
 
-const CertificationCompletion = ({ onComplete }: CertificationCompletionProps) => {
-  const handleSubmit = (e: React.FormEvent) => {
+const CertificationCompletion = ({ onComplete, formData }: CertificationCompletionProps) => {
+  const { user } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onComplete();
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    try {
+      // Send email notification
+      const { error: emailError } = await supabase.functions.invoke('send-certification-email', {
+        body: {
+          traineeName: formData.get('traineeSignature'),
+          traineeEmail: user?.email,
+          certificationType: formData.get('certificationType') || 'Seam Weld',
+          completionDate: formData.get('traineeDate'),
+        },
+      });
+
+      if (emailError) throw emailError;
+
+      toast.success('Certification completed successfully', {
+        description: 'A confirmation email has been sent to your inbox.',
+      });
+
+      onComplete();
+    } catch (error) {
+      console.error('Error completing certification:', error);
+      toast.error('Failed to complete certification', {
+        description: 'Please try again or contact support if the issue persists.',
+      });
+    }
   };
 
   return (
@@ -61,4 +96,3 @@ const CertificationCompletion = ({ onComplete }: CertificationCompletionProps) =
 };
 
 export default CertificationCompletion;
-
