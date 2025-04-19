@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,6 +8,10 @@ import { toast } from '@/components/ui/sonner';
 import SafetySection from './SafetySection';
 import ProductionSection from './ProductionSection';
 import QualitySection from './QualitySection';
+import DCPSection from './DCPSection';
+import CertificationEvaluation from './CertificationEvaluation';
+import ApprovalSection from './ApprovalSection';
+import CertificationCompletion from './CertificationCompletion';
 import {
   Select,
   SelectContent,
@@ -15,7 +20,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-type Section = 'initial' | 'safety' | 'production' | 'quality';
+type Section = 'initial' | 'safety' | 'production' | 'quality' | 'dcp' | 'evaluation' | 'approval' | 'completion';
 
 const CertificationForm = () => {
   const [currentSection, setCurrentSection] = useState<Section>('initial');
@@ -39,14 +44,6 @@ const CertificationForm = () => {
     setCurrentSection('safety');
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
   const renderCurrentSection = () => {
     switch (currentSection) {
       case 'safety':
@@ -54,7 +51,15 @@ const CertificationForm = () => {
       case 'production':
         return <ProductionSection onComplete={() => setCurrentSection('quality')} />;
       case 'quality':
-        return <QualitySection onComplete={() => setCurrentSection('initial')} />;
+        return <QualitySection onComplete={() => setCurrentSection('dcp')} />;
+      case 'dcp':
+        return <DCPSection onComplete={() => setCurrentSection('evaluation')} />;
+      case 'evaluation':
+        return <CertificationEvaluation onComplete={() => setCurrentSection('approval')} />;
+      case 'approval':
+        return <ApprovalSection onComplete={() => setCurrentSection('completion')} />;
+      case 'completion':
+        return <CertificationCompletion onComplete={() => setCurrentSection('initial')} />;
       default:
         return (
           <Card className="p-6 w-full max-w-2xl mx-auto">
@@ -163,3 +168,4 @@ const CertificationForm = () => {
 };
 
 export default CertificationForm;
+
