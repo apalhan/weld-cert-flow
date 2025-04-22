@@ -23,7 +23,17 @@ serve(async (req) => {
   }
 
   try {
-    const { traineeName, traineeEmail, certificationType, completionDate }: EmailData = await req.json()
+    const requestData = await req.json()
+    const { traineeName, traineeEmail, certificationType, completionDate }: EmailData = requestData
+
+    // Log the data received to help with debugging
+    console.log("Email data received:", { traineeName, traineeEmail, certificationType, completionDate })
+
+    // Validate required fields
+    if (!traineeName || !traineeEmail) {
+      console.error("Missing required fields:", { traineeName, traineeEmail })
+      throw new Error("Missing required fields: traineeName and traineeEmail are required")
+    }
 
     const emailResponse = await resend.emails.send({
       from: "Certification System <onboarding@resend.dev>",

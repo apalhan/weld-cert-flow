@@ -23,16 +23,21 @@ const CertificationCompletion = ({ onComplete, formData }: CertificationCompleti
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
-    const formData = new FormData(form);
-
+    const formDataValues = new FormData(form);
+    
+    // Get trainee signature from form or use formData if available
+    const traineeName = formDataValues.get('traineeSignature')?.toString() || formData?.traineeName || '';
+    const completionDate = formDataValues.get('traineeDate')?.toString() || new Date().toISOString().split('T')[0];
+    const certificationType = formData?.certificationType || 'Seam Weld';
+    
     try {
       // Send email notification
       const { error: emailError } = await supabase.functions.invoke('send-certification-email', {
         body: {
-          traineeName: formData.get('traineeSignature'),
+          traineeName: traineeName,
           traineeEmail: user?.email,
-          certificationType: formData.get('certificationType') || 'Seam Weld',
-          completionDate: formData.get('traineeDate'),
+          certificationType: certificationType,
+          completionDate: completionDate,
         },
       });
 
@@ -63,19 +68,30 @@ const CertificationCompletion = ({ onComplete, formData }: CertificationCompleti
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="prodSupervisor">Prod. Supervisor Signature</Label>
-              <Input id="prodSupervisor" required />
+              <Input id="prodSupervisor" name="prodSupervisor" required />
             </div>
             <div>
               <Label htmlFor="prodDate">Date</Label>
-              <Input id="prodDate" type="date" required />
+              <Input id="prodDate" name="prodDate" type="date" required />
             </div>
             <div>
               <Label htmlFor="traineeSignature">Trainee Signature</Label>
-              <Input id="traineeSignature" required />
+              <Input 
+                id="traineeSignature" 
+                name="traineeSignature" 
+                required 
+                defaultValue={formData?.traineeName || ''}
+              />
             </div>
             <div>
               <Label htmlFor="traineeDate">Date</Label>
-              <Input id="traineeDate" type="date" required />
+              <Input 
+                id="traineeDate" 
+                name="traineeDate" 
+                type="date" 
+                required 
+                defaultValue={new Date().toISOString().split('T')[0]}
+              />
             </div>
           </div>
 
@@ -83,10 +99,17 @@ const CertificationCompletion = ({ onComplete, formData }: CertificationCompleti
             <Label htmlFor="comments">Comments</Label>
             <Textarea
               id="comments"
+              name="comments"
               placeholder="Enter any final comments here..."
               className="min-h-[100px]"
             />
           </div>
+
+          <input 
+            type="hidden" 
+            name="certificationType" 
+            value={formData?.certificationType || 'Seam Weld'} 
+          />
 
           <Button type="submit" className="w-full">Complete Certification</Button>
         </form>
