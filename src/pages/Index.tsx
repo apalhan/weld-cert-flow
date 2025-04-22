@@ -1,13 +1,17 @@
 
 import CertificationForm from "@/components/CertificationForm";
+import CertificationHistory from "@/components/CertificationHistory";
 import { useAuth } from "@/components/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("new");
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -30,14 +34,26 @@ const Index = () => {
               Seam Weld Certification System
             </h2>
             <p className="text-industrial-600">
-              Complete the form below to start a new certification process
+              Manage your certification processes
             </p>
           </div>
           <Button onClick={handleSignOut} variant="outline">
             Sign Out
           </Button>
         </div>
-        <CertificationForm />
+
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsTrigger value="new">New Certification</TabsTrigger>
+            <TabsTrigger value="history">Certification History</TabsTrigger>
+          </TabsList>
+          <TabsContent value="new">
+            <CertificationForm />
+          </TabsContent>
+          <TabsContent value="history">
+            <CertificationHistory />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
