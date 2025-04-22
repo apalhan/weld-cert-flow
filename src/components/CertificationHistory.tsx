@@ -179,10 +179,21 @@ const CertificationHistory = () => {
               <Pagination className="mt-4">
                 <PaginationContent>
                   <PaginationItem>
-                    <PaginationPrevious 
-                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                      disabled={currentPage === 1}
-                    />
+                    {currentPage === 1 ? (
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        disabled
+                        className="cursor-not-allowed opacity-50"
+                      >
+                        <span className="sr-only">Previous page</span>
+                        <span className="h-4 w-4">←</span>
+                      </Button>
+                    ) : (
+                      <PaginationPrevious 
+                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      />
+                    )}
                   </PaginationItem>
                   
                   {Array.from({ length: totalPages }).map((_, i) => (
@@ -197,10 +208,21 @@ const CertificationHistory = () => {
                   ))}
                   
                   <PaginationItem>
-                    <PaginationNext 
-                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                      disabled={currentPage === totalPages}
-                    />
+                    {currentPage === totalPages ? (
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        disabled
+                        className="cursor-not-allowed opacity-50"
+                      >
+                        <span className="sr-only">Next page</span>
+                        <span className="h-4 w-4">→</span>
+                      </Button>
+                    ) : (
+                      <PaginationNext 
+                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                      />
+                    )}
                   </PaginationItem>
                 </PaginationContent>
               </Pagination>
