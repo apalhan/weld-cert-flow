@@ -19,11 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './AuthProvider';
 
 type Section = 'initial' | 'safety' | 'production' | 'quality' | 'dcp' | 'evaluation' | 'approval' | 'completion';
 
 const CertificationForm = () => {
   const [currentSection, setCurrentSection] = useState<Section>('initial');
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     traineeName: '',
     areaExamined: '',
@@ -32,6 +35,7 @@ const CertificationForm = () => {
     trainerInitials: '',
     traineeInitials: '',
   });
+  const { user } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,14 +45,42 @@ const CertificationForm = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    
+
+    if (!user) {
+      toast.error("You must be signed in to submit the form.");
+      return;
+    }
+    setLoading(true);
+    const { traineeName, areaExamined, certificationType, beginningDate, trainerInitials, traineeInitials } = formData;
+
+    // Insert the survey data into Supabase
+    const { error } = await supabase
+      .from('certification_surveys')
+      .insert([{
+        trainee_name: traineeName,
+        area_examined: areaExamined,
+        certification_type: certificationType,
+        beginning_date: beginningDate,
+        trainer_initials: trainerInitials,
+        trainee_initials: traineeInitials,
+        user_id: user.id,
+      }]);
+
+    setLoading(false);
+
+    if (error) {
+      toast.error("Failed to start certification process", {
+        description: error.message,
+      });
+      return;
+    }
+
     toast.success("Certification process started", {
       description: `Trainee: ${formData.traineeName}, Type: ${formData.certificationType || 'Not specified'}`,
     });
-    
+
     setCurrentSection('safety');
   };
 
@@ -106,6 +138,7 @@ const CertificationForm = () => {
                   <div className="space-y-2">
                     <Label htmlFor="certificationType">Certification Type</Label>
                     <Select
+                      value={formData.certificationType}
                       onValueChange={(value) =>
                         setFormData(prev => ({ ...prev, certificationType: value }))
                       }
@@ -161,9 +194,10 @@ const CertificationForm = () => {
 
                 <Button 
                   type="submit"
+                  disabled={loading}
                   className="w-full mt-6 bg-industrial-700 hover:bg-industrial-800"
                 >
-                  Begin Certification Process
+                  {loading ? 'Starting...' : 'Begin Certification Process'}
                 </Button>
               </form>
             </div>
