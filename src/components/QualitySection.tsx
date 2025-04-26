@@ -30,6 +30,7 @@ interface QualitySectionProps {
 const QualitySection = ({ onComplete }: QualitySectionProps) => {
   const { user } = useAuth();
   const [hasViewedPowerpoint, setHasViewedPowerpoint] = useState(false);
+  const [hasViewedGrindingVideos, setHasViewedGrindingVideos] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,17 +38,20 @@ const QualitySection = ({ onComplete }: QualitySectionProps) => {
     if (user) {
       const { error } = await supabase
         .from('certification_surveys')
-        .update({ viewed_defects_powerpoint: hasViewedPowerpoint })
+        .update({ 
+          viewed_defects_powerpoint: hasViewedPowerpoint,
+          viewed_grinding_videos: hasViewedGrindingVideos 
+        })
         .eq('user_id', user.id);
 
       if (error) {
-        console.error('Error updating powerpoint status:', error);
+        console.error('Error updating training materials status:', error);
       }
     }
     
     onComplete();
-    toast.success("Certification sections completed!", {
-      description: "All sections have been completed successfully.",
+    toast.success("Quality section completed!", {
+      description: "All quality requirements have been completed successfully.",
     });
   };
 
@@ -88,7 +92,23 @@ const QualitySection = ({ onComplete }: QualitySectionProps) => {
                   Has the trainee viewed SI1000 defects powerpoint?
                 </Label>
                 <p className="text-sm text-muted-foreground">
-                  Located at: S drive>West Lafayette>Training>Public
+                  Located at: S Drive{">"} West Lafayette{">"} Training{">"} Public
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3">
+              <Checkbox 
+                id="viewedGrindingVideos"
+                checked={hasViewedGrindingVideos}
+                onCheckedChange={(checked) => setHasViewedGrindingVideos(checked as boolean)}
+              />
+              <div className="space-y-1">
+                <Label htmlFor="viewedGrindingVideos" className="text-base">
+                  Has trainee viewed "Grinding Booth Method 1 & 2" videos?
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Located at: S Drive{">"} West Lafayette{">"} Training{">"} Public{">"} Training Videos
                 </p>
               </div>
             </div>
