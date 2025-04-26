@@ -1,12 +1,9 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from './AuthProvider';
 
 const PRODUCTION_QUESTIONS = [
   "Does the trainee understand the purpose of the operation?",
@@ -19,10 +16,18 @@ const PRODUCTION_QUESTIONS = [
   "Can trainee find/locate, open and identify elements of Drawing /Process Sheets?",
   "Can trainee read and interpret bills of material on prints?",
   "Can trainee read, interpret and locate dimensions, tolerances, notes, etc.?",
+  "Can the trainee identify tool #s, rate, machine, etc.?",
+  "Can trainee identify the correct grid plates and quantity needed for the section?",
   "When starting a new section, is the trainee starting on their right?",
   "Are motions fluid and without hesitation?",
   "Does trainee avoid double handling of parts?",
-  "Can the trainee complete all required documentation legibly?"
+  "Can the trainee complete all required documentation legibly?",
+  "Travelers, log sheets, downtime records",
+  "Tear test records, scrap records, grinding red cards",
+  "Is the trainee speed consistent with acceptable standards?",
+  "Does the trainee understand gauge control, calibration, etc.?",
+  "Can trainee make necessary repairs? (grind, etc.)",
+  "Can the trainee calculate grids required per section when required?"
 ];
 
 interface ProductionSectionProps {
@@ -30,23 +35,8 @@ interface ProductionSectionProps {
 }
 
 const ProductionSection = ({ onComplete }: ProductionSectionProps) => {
-  const { user } = useAuth();
-  const [hasWatchedVideos, setHasWatchedVideos] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (user) {
-      const { error } = await supabase
-        .from('certification_surveys')
-        .update({ viewed_grinding_videos: hasWatchedVideos })
-        .eq('user_id', user.id);
-
-      if (error) {
-        console.error('Error updating grinding videos status:', error);
-      }
-    }
-    
     onComplete();
   };
 
@@ -74,24 +64,6 @@ const ProductionSection = ({ onComplete }: ProductionSectionProps) => {
               </RadioGroup>
             </div>
           ))}
-
-          <div className="space-y-4 border-t pt-4">
-            <div className="flex items-start space-x-3">
-              <Checkbox 
-                id="watchedVideos" 
-                checked={hasWatchedVideos}
-                onCheckedChange={(checked) => setHasWatchedVideos(checked as boolean)}
-              />
-              <div className="space-y-1">
-                <Label htmlFor="watchedVideos" className="text-base">
-                  Has the trainee viewed grinding videos?
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  Located at: S Drive>West Lafayette>Training>Public>Training Videos
-                </p>
-              </div>
-            </div>
-          </div>
 
           <Button type="submit" className="w-full">Continue to Quality</Button>
         </form>
