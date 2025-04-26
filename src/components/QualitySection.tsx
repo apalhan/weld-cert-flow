@@ -11,7 +11,7 @@ import { useAuth } from './AuthProvider';
 
 const QUALITY_QUESTIONS = [
   "Does the trainee know the Company Quality Policy?",
-  "Can the trainee read and interpret the SI1000?",
+  "Can the trainee read and interpret the quality standards?",
   "Can the trainee identify run-offs, end slips, bent offsets, twist, waviness?",
   "Can the trainee explain the cause for specific defects?",
   "Does the trainee understand how defects affect assembly?",
@@ -29,7 +29,6 @@ interface QualitySectionProps {
 
 const QualitySection = ({ onComplete }: QualitySectionProps) => {
   const { user } = useAuth();
-  const [hasViewedPowerpoint, setHasViewedPowerpoint] = useState(false);
   const [hasViewedGrindingVideos, setHasViewedGrindingVideos] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -39,7 +38,6 @@ const QualitySection = ({ onComplete }: QualitySectionProps) => {
       const { error } = await supabase
         .from('certification_surveys')
         .update({ 
-          viewed_defects_powerpoint: hasViewedPowerpoint,
           viewed_grinding_videos: hasViewedGrindingVideos 
         })
         .eq('user_id', user.id);
@@ -83,22 +81,6 @@ const QualitySection = ({ onComplete }: QualitySectionProps) => {
           <div className="space-y-4 border-t pt-4">
             <div className="flex items-start space-x-3">
               <Checkbox 
-                id="viewedPowerpoint" 
-                checked={hasViewedPowerpoint}
-                onCheckedChange={(checked) => setHasViewedPowerpoint(checked as boolean)}
-              />
-              <div className="space-y-1">
-                <Label htmlFor="viewedPowerpoint" className="text-base">
-                  Has the trainee viewed SI1000 defects powerpoint?
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  Located at: S Drive{">"} West Lafayette{">"} Training{">"} Public
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-3">
-              <Checkbox 
                 id="viewedGrindingVideos"
                 checked={hasViewedGrindingVideos}
                 onCheckedChange={(checked) => setHasViewedGrindingVideos(checked as boolean)}
@@ -108,7 +90,7 @@ const QualitySection = ({ onComplete }: QualitySectionProps) => {
                   Has trainee viewed "Grinding Booth Method 1 & 2" videos?
                 </Label>
                 <p className="text-sm text-muted-foreground">
-                  Located at: S Drive{">"} West Lafayette{">"} Training{">"} Public{">"} Training Videos
+                  Located at: S Drive {">"} West Lafayette {">"} Training {">"} Public {">"} Training Videos
                 </p>
               </div>
             </div>
