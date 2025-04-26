@@ -143,10 +143,10 @@ const CertificationForm = () => {
                         setFormData(prev => ({ ...prev, certificationType: value }))
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-white dark:bg-gray-800">
                         <SelectValue placeholder="Select type" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white dark:bg-gray-800">
                         <SelectItem value="auto">Auto</SelectItem>
                         <SelectItem value="manual">Manual</SelectItem>
                       </SelectContent>

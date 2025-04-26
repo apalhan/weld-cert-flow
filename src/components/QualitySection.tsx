@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,19 +8,24 @@ import { toast } from '@/components/ui/sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthProvider';
 
-const QUALITY_QUESTIONS = [
-  "Does the trainee know the Company Quality Policy?",
-  "Can the trainee read and interpret the quality standards?",
-  "Can the trainee identify run-offs, end slips, bent offsets, twist, waviness?",
-  "Can the trainee explain the cause for specific defects?",
-  "Does the trainee understand how defects affect assembly?",
-  "Does the trainee understand gauge control, calibration, etc.?",
-  "Is the trainee able to accurately measure section squareness?",
-  "Is the trainee able to measure resistance and know when to test?",
-  "Is the trainee able to correctly use the go-no-go pin gauge?",
-  "Can the trainee use the light box to see whiskers, weld spatter, etc.?",
-  "Does the trainee understand non-conformance policies?"
-];
+const QUALITY_QUESTIONS = {
+  qualityRequirements: {
+    title: "Understanding of quality requirements",
+    questions: [
+      "Does the trainee know the Company Quality Policy?",
+      "Can the trainee read and interpret the quality standards?",
+      "Can the trainee identify run-offs, end slips, bent offsets, twist, waviness?",
+      "Can the trainee explain the cause for specific defects?",
+      "Does the trainee understand how defects affect assembly?",
+      "Does the trainee understand gauge control, calibration, etc.?",
+      "Is the trainee able to accurately measure section squareness?",
+      "Is the trainee able to measure resistance and know when to test?",
+      "Is the trainee able to correctly use the go-no-go pin gauge?",
+      "Can the trainee use the light box to see whiskers, weld spatter, etc.?",
+      "Does the trainee understand non-conformance policies?"
+    ]
+  }
+};
 
 interface QualitySectionProps {
   onComplete: () => void;
@@ -62,19 +66,28 @@ const QualitySection = ({ onComplete }: QualitySectionProps) => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {QUALITY_QUESTIONS.map((question, index) => (
-            <div key={index} className="space-y-4">
-              <Label>{question}</Label>
-              <RadioGroup defaultValue="pending" className="flex space-x-4">
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="pass" id={`pass-${index}`} />
-                  <Label htmlFor={`pass-${index}`}>Pass</Label>
+          {Object.entries(QUALITY_QUESTIONS).map(([section, { title, questions }]) => (
+            <div key={section} className="space-y-4 mb-8">
+              <div className="space-y-2">
+                <h3 className="font-bold text-lg underline">{title}</h3>
+                <Separator className="my-2" />
+              </div>
+
+              {questions.map((question, index) => (
+                <div key={index} className="space-y-4">
+                  <Label>{question}</Label>
+                  <RadioGroup defaultValue="pending" className="flex space-x-4">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="pass" id={`${section}-pass-${index}`} />
+                      <Label htmlFor={`${section}-pass-${index}`}>Pass</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="fail" id={`${section}-fail-${index}`} />
+                      <Label htmlFor={`${section}-fail-${index}`}>Fail</Label>
+                    </div>
+                  </RadioGroup>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="fail" id={`fail-${index}`} />
-                  <Label htmlFor={`fail-${index}`}>Fail</Label>
-                </div>
-              </RadioGroup>
+              ))}
             </div>
           ))}
 
