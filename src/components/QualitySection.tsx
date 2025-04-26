@@ -1,10 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from '@/components/ui/sonner';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './AuthProvider';
 
 const QUALITY_QUESTIONS = [
   "Does the trainee know the Company Quality Policy?",
@@ -25,8 +28,23 @@ interface QualitySectionProps {
 }
 
 const QualitySection = ({ onComplete }: QualitySectionProps) => {
-  const handleSubmit = (e: React.FormEvent) => {
+  const { user } = useAuth();
+  const [hasViewedPowerpoint, setHasViewedPowerpoint] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (user) {
+      const { error } = await supabase
+        .from('certification_surveys')
+        .update({ viewed_defects_powerpoint: hasViewedPowerpoint })
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error updating powerpoint status:', error);
+      }
+    }
+    
     onComplete();
     toast.success("Certification sections completed!", {
       description: "All sections have been completed successfully.",
@@ -57,6 +75,24 @@ const QualitySection = ({ onComplete }: QualitySectionProps) => {
               </RadioGroup>
             </div>
           ))}
+
+          <div className="space-y-4 border-t pt-4">
+            <div className="flex items-start space-x-3">
+              <Checkbox 
+                id="viewedPowerpoint" 
+                checked={hasViewedPowerpoint}
+                onCheckedChange={(checked) => setHasViewedPowerpoint(checked as boolean)}
+              />
+              <div className="space-y-1">
+                <Label htmlFor="viewedPowerpoint" className="text-base">
+                  Has the trainee viewed SI1000 defects powerpoint?
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Located at: S drive>West Lafayette>Training>Public
+                </p>
+              </div>
+            </div>
+          </div>
 
           <Button type="submit" className="w-full">Complete Certification</Button>
         </form>

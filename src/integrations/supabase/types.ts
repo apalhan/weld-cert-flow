@@ -15,33 +15,45 @@ export type Database = {
           beginning_date: string
           certification_type: string
           created_at: string
+          defects_powerpoint_location: string | null
+          grinding_videos_location: string | null
           id: string
           trainee_initials: string
           trainee_name: string
           trainer_initials: string
           user_id: string
+          viewed_defects_powerpoint: boolean | null
+          viewed_grinding_videos: boolean | null
         }
         Insert: {
           area_examined: string
           beginning_date: string
           certification_type: string
           created_at?: string
+          defects_powerpoint_location?: string | null
+          grinding_videos_location?: string | null
           id?: string
           trainee_initials: string
           trainee_name: string
           trainer_initials: string
           user_id: string
+          viewed_defects_powerpoint?: boolean | null
+          viewed_grinding_videos?: boolean | null
         }
         Update: {
           area_examined?: string
           beginning_date?: string
           certification_type?: string
           created_at?: string
+          defects_powerpoint_location?: string | null
+          grinding_videos_location?: string | null
           id?: string
           trainee_initials?: string
           trainee_name?: string
           trainer_initials?: string
           user_id?: string
+          viewed_defects_powerpoint?: boolean | null
+          viewed_grinding_videos?: boolean | null
         }
         Relationships: []
       }
