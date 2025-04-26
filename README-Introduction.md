@@ -1,51 +1,92 @@
-# 🛠️ Dayton Weld Certification – Lovable Project
 
-Welcome to the project powering **Dayton Weld Certification’s** online application and certification platform.
+# 🛠️ Dayton Weld Certification – Technical Documentation
 
-This project was built using [Lovable](https://lovable.dev), and can be edited visually or through code.
+## Project Architecture
 
----
+### Frontend Components
+- **Authentication**: Managed through AuthProvider component
+- **Certification Process**: Multi-step form with progress tracking
+- **Quality Checks**: Video completion verification
+- **Production Standards**: Assessment tracking
+- **Safety Requirements**: Checklist and verification
+- **DCP Integration**: Documentation control process
 
-## 🔗 Key URLs
+### Database Structure (Supabase)
+
+#### Tables
+1. **certification_surveys**
+   - Tracks certification progress
+   - Stores completion status
+   - Manages training materials
+
+2. **profiles**
+   - User information
+   - Role management
+   - Account tracking
+
+### Edge Functions
+- **send-certification-email**: Handles email notifications
+- Implemented using Deno runtime
+- Integrated with Resend API
+
+## 🔗 Key URLs & Resources
 
 - **Live Site**: [https://daytonweldcertification.com](https://daytonweldcertification.com)  
-- **Lovable Project Editor**: [https://lovable.dev/projects/55ecfff2-3672-447e-94ff-4957930768f9](https://lovable.dev/projects/55ecfff2-3672-447e-94ff-4957930768f9)
+- **Lovable Editor**: [https://lovable.dev/projects/55ecfff2-3672-447e-94ff-4957930768f9](https://lovable.dev/projects/55ecfff2-3672-447e-94ff-4957930768f9)
+
+## ⚙️ Technology Stack Details
+
+### Frontend
+- **React + Vite**: Fast development and optimized builds
+- **TypeScript**: Type-safe development
+- **Tailwind CSS**: Utility-first styling
+- **shadcn-ui**: Pre-built accessible components
+
+### Backend (Supabase)
+- **Authentication**: Email/password
+- **Database**: PostgreSQL with RLS
+- **Edge Functions**: Deno runtime
+- **Storage**: File management
+
+### Email (Resend)
+- Transactional email service
+- HTML email templates
+- Delivery tracking
+
+## 🚀 Deployment Process
+
+1. **Development**
+   ```bash
+   npm run dev
+   ```
+
+2. **Testing**
+   ```bash
+   npm run build
+   npm run preview
+   ```
+
+3. **Production**
+   - Use Lovable's publishing system
+   - Automatic SSL certificate management
+   - CDN distribution
+
+## 🌐 Domain Management
+
+- **Domain**: `daytonweldcertification.com`
+- **SSL**: Enabled automatically
+- **Management**: Via Lovable dashboard
+
+## 📬 Email Configuration
+
+- **Service**: Resend
+- **API Integration**: Via Edge Functions
+- **Templates**: HTML email templates
+- **Tracking**: Delivery and open rates
 
 ---
 
-## ⚙️ Tech Stack
+For developer onboarding and detailed documentation, see [README.md](./README.md)
 
-- React + Vite
-- TypeScript
-- Tailwind CSS
-- shadcn-ui
-- Lovable (visual builder)
-- Resend (transactional email)
+> Built with ❤️ using React, Tailwind, and Lovable
 
----
-
-## 🚀 Deployment
-
-To publish updates:
-
-1. Open [Lovable](https://lovable.dev/projects/55ecfff2-3672-447e-94ff-4957930768f9)
-2. Click **Share → Publish**
-3. Your site will update at: [daytonweldcertification.com](https://daytonweldcertification.com)
-
----
-
-## 🌐 Custom Domain
-
-- Domain: `daytonweldcertification.com`
-- SSL: Enabled
-- To manage domain settings:
-  - Go to **Project > Settings > Domains** in Lovable  
-  - [Custom domain setup guide](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
-
----
-
-👉 For full developer instructions and onboarding, see [README-handoff.md](./README-handoff.md)
-
----
-
-📬 Email service powered by [Resend](https://resend.com)

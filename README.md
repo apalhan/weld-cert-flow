@@ -1,73 +1,80 @@
-# Welcome to your Lovable project
 
-## Project info
+# Dayton Weld Certification Application
 
-**URL**: https://lovable.dev/projects/55ecfff2-3672-447e-94ff-4957930768f9
+## Project Overview
+This application manages the certification process for welders at Dayton, including safety training, production requirements, quality standards, and documentation.
 
-## How can I edit this code?
+## 🛠️ Technology Stack
+- **Frontend**: React 18 with TypeScript and Vite
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **Backend**: Supabase (Authentication, Database, Edge Functions)
+- **Email Service**: Resend
 
-There are several ways of editing your application.
+## 📁 Project Structure
 
-**Use Lovable**
+```
+src/
+├── components/          # React components
+│   ├── ui/             # shadcn/ui components
+│   ├── QualitySection.tsx
+│   ├── ProductionSection.tsx
+│   ├── SafetySection.tsx
+│   ├── DCPSection.tsx
+│   └── ...
+├── integrations/       
+│   └── supabase/       # Supabase configuration
+├── hooks/              # Custom React hooks
+├── lib/                # Utility functions
+└── pages/              # Page components
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/55ecfff2-3672-447e-94ff-4957930768f9) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+supabase/
+├── config.toml         # Supabase configuration
+└── functions/          # Edge functions
+    └── send-certification-email/
 ```
 
-**Edit a file directly in GitHub**
+## 🗄️ Database Schema
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### certification_surveys
+- Stores certification data and progress
+- Includes training video completion tracking
+- Links to user profiles
 
-**Use GitHub Codespaces**
+### profiles
+- Extended user information
+- Role-based access control
+- Timestamp tracking
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🔐 Authentication
+- Email/password authentication via Supabase
+- Role-based access control
+- Protected routes and API endpoints
 
-## What technologies are used for this project?
+## 📧 Email System
+- Resend integration for transactional emails
+- Certification completion notifications
+- Edge function implementation
 
-This project is built with:
+## 🚀 Development
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+# Install dependencies
+npm install
 
-## How can I deploy this project?
+# Start development server
+npm run dev
 
-Simply open [Lovable](https://lovable.dev/projects/55ecfff2-3672-447e-94ff-4957930768f9) and click on Share -> Publish.
+# Build for production
+npm run build
+```
 
-## Can I connect a custom domain to my Lovable project?
+## 📚 Documentation
+- [Supabase Dashboard](https://supabase.com/dashboard)
+- [Resend Dashboard](https://resend.com)
+- [shadcn/ui Components](https://ui.shadcn.com)
 
-Yes, you can!
+## 🌐 Deployment
+1. Open [Lovable](https://lovable.dev/projects/55ecfff2-3672-447e-94ff-4957930768f9)
+2. Click Share → Publish
+3. Site updates at [daytonweldcertification.com](https://daytonweldcertification.com)
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
